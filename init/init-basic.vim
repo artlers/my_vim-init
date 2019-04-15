@@ -18,7 +18,17 @@
 set nocompatible
 
 " 设置 Backspace 键模式
-set bs=eol,start,indent
+" 插入模式下可以删除行首的缩进
+" 可以删除前一行行末的回车
+" 进入插入模式后，可以删除原有字符
+set backspace=indent,eol,start
+
+" 按左方向键可以移动到上一行
+" 按右方向键可以移动到下一行
+set whichwrap+=<,>,[,]
+
+" 放开tw，为0默认不限制textwidth
+set tw=0
 
 " 自动缩进
 set autoindent
@@ -50,7 +60,9 @@ set ruler
 set ignorecase
 
 " 智能搜索大小写判断，默认忽略大小写，除非搜索内容包含大写字母
-set smartcase
+" 关闭智能大小写，因为开启后Ex命令模式下大小写混合输入必须完全正确才能匹配，影
+" 响使用
+"set smartcase
 
 " 高亮搜索内容
 set hlsearch
@@ -71,6 +83,7 @@ if has('multi_byte')
 
 	" 打开文件时自动尝试下面顺序的编码
 	set fileencodings=ucs-bom,utf-8,gbk,gb18030,big5,euc-jp,latin1
+	"set fileencodings=utf-8,cp936,ucs-bom,gb18030,gbk,gb2312,latin1
 endif
 
 
@@ -127,9 +140,14 @@ set formatoptions+=m
 " 合并两行中文时，不在中间加空格
 set formatoptions+=B
 
-" 文件换行符，默认使用 unix 换行符
-set ffs=unix,dos,mac
+" 文件换行符，默认使用 unix 换行符 #平台差异
+set ffs=dos,unix,mac
 
+" 设置中文帮助
+"set helplang=cn
+
+" 200个历史命令
+set history=200
 
 "----------------------------------------------------------------------
 " 设置代码折叠
@@ -167,6 +185,5 @@ set wildignore+=*.ppt,*.pptx,*.docx,*.xlt,*.xls,*.xlsx,*.odt,*.wps
 set wildignore+=*.msi,*.crx,*.deb,*.vfd,*.apk,*.ipa,*.bin,*.msu
 set wildignore+=*.gba,*.sfc,*.078,*.nds,*.smd,*.smc
 set wildignore+=*.linux2,*.win32,*.darwin,*.freebsd,*.linux,*.android
-
 
 

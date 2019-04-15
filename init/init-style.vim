@@ -13,6 +13,28 @@
 " 显示设置
 "----------------------------------------------------------------------
 
+"字体DejaVu Sans Mono for Powerline
+if has('gui_running')
+    if has("win16") || has("win32") || has("win95") || has("win64")
+        set guifont=DejaVu_Sans_Mono_for_Powerline:h12:cANSI,Consolas:h12:cANSI,Courier_New:h12:cANSI
+    else
+        set guifont=DejaVu\ Sans\ Mono 12
+    endif
+endif
+
+" 禁止显示菜单和工具条
+set guioptions-=m
+set guioptions-=T
+
+" 窗口大小
+set lines=35 columns=130
+
+
+" 高亮显示当前行 列
+"set cursorline
+"set cursorcolumn
+
+
 " 总是显示状态栏
 set laststatus=2
 
@@ -49,8 +71,13 @@ set background=dark
 " 允许 256 色
 set t_Co=256
 
+" If you have vim >=8.0 or Neovim >= 0.1.5，开启真彩色
+if (has("termguicolors"))
+	set termguicolors
+endif
+
 " 设置颜色主题，会在所有 runtimepaths 的 colors 目录寻找同名配置
-color desert256
+colorscheme gruvbox
 
 
 "----------------------------------------------------------------------
@@ -286,6 +313,4 @@ endfunc
 set tabline=%!Vim_NeatTabLine()
 set guitablabel=%{Vim_NeatGuiTabLabel()}
 set guitabtooltip=%{Vim_NeatGuiTabTip()}
-
-
 

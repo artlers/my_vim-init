@@ -14,9 +14,10 @@
 " 默认情况下的分组，可以再前面覆盖之
 "----------------------------------------------------------------------
 if !exists('g:bundle_group')
-	let g:bundle_group = ['basic', 'tags', 'enhanced', 'filetypes', 'textobj']
-	let g:bundle_group += ['tags', 'airline', 'nerdtree', 'ale', 'echodoc']
+	let g:bundle_group = ['basic', 'enhanced', 'filetypes', 'textobj']
+	let g:bundle_group += ['tags', 'commprog', 'airline', 'nerdtree', 'ale', 'echodoc']
 	let g:bundle_group += ['leaderf']
+	let g:bundle_group += ['supertab']
 endif
 
 
@@ -44,7 +45,7 @@ call plug#begin(get(g:, 'bundle_home', '~/.vim/bundles'))
 " 全文快速移动，<leader><leader>f{char} 即可触发
 Plug 'easymotion/vim-easymotion'
 
-" 文件浏览器，代替 netrw
+" 文件浏览器，代替 netrw normal模式直接按-呼出dirvish窗口
 Plug 'justinmk/vim-dirvish'
 
 " 表格对齐，使用命令 Tabularize
@@ -94,6 +95,10 @@ if index(g:bundle_group, 'basic') >= 0
 	" 展示开始画面，显示最近编辑过的文件
 	Plug 'mhinz/vim-startify'
 
+	" 默认不显示 startify
+	let g:startify_disable_at_vimenter = 1
+	let g:startify_session_dir = '~/.vim/session'
+
 	" 一次性安装一大堆 colorscheme
 	Plug 'flazz/vim-colorschemes'
 
@@ -105,29 +110,6 @@ if index(g:bundle_group, 'basic') >= 0
 
 	" 用于在侧边符号栏显示 git/svn 的 diff
 	Plug 'mhinz/vim-signify'
-
-	" 根据 quickfix 中匹配到的错误信息，高亮对应文件的错误行
-	" 使用 :RemoveErrorMarkers 命令或者 <space>ha 清除错误
-	Plug 'mh21/errormarker.vim'
-
-	" 使用 ALT+e 会在不同窗口/标签上显示 A/B/C 等编号，然后字母直接跳转
-	Plug 't9md/vim-choosewin'
-
-	" 提供基于 TAGS 的定义预览，函数参数预览，quickfix 预览
-	Plug 'skywind3000/vim-preview'
-
-	" Git 支持
-	Plug 'tpope/vim-fugitive'
-
-	" 使用 ALT+E 来选择窗口
-	nmap <m-e> <Plug>(choosewin)
-
-	" 默认不显示 startify
-	let g:startify_disable_at_vimenter = 1
-	let g:startify_session_dir = '~/.vim/session'
-
-	" 使用 <space>ha 清除 errormarker 标注的错误
-	noremap <silent><space>ha :RemoveErrorMarkers<cr>
 
 	" signify 调优
 	let g:signify_vcs_list = ['git', 'svn']
@@ -141,6 +123,26 @@ if index(g:bundle_group, 'basic') >= 0
 	let g:signify_vcs_cmds = {
 			\ 'git': 'git diff --no-color --diff-algorithm=histogram --no-ext-diff -U0 -- %f',
 			\}
+
+	" 根据 quickfix 中匹配到的错误信息，高亮对应文件的错误行
+	" 使用 :RemoveErrorMarkers 命令或者 <space>ha 清除错误
+	Plug 'mh21/errormarker.vim'
+
+	" 使用 ALT+e 会在不同窗口/标签上显示 A/B/C 等编号，然后字母直接跳转
+	Plug 't9md/vim-choosewin'
+
+	" 使用 ALT+E 来选择窗口
+	nmap <m-e> <Plug>(choosewin)
+
+	" 提供基于 TAGS 的定义预览，函数参数预览，quickfix 预览
+	Plug 'skywind3000/vim-preview'
+
+	" Git 支持
+	Plug 'tpope/vim-fugitive'
+
+	" 使用 <space>ha 清除 errormarker 标注的错误
+	noremap <silent><space>ha :RemoveErrorMarkers<cr>
+
 endif
 
 
@@ -149,8 +151,25 @@ endif
 "----------------------------------------------------------------------
 if index(g:bundle_group, 'enhanced') >= 0
 
+	" 图形化撤销选择
+	Plug 'sjl/gundo.vim'
+
+	" F5打开Gundo窗口
+	nnoremap <F5> :GundoToggle<cr>
+
+	" 快捷操作""内容，.重复操作
+	Plug 'tpope/vim-surround'
+	Plug 'tpope/vim-repeat'
+
+	" 用不同颜色高亮单词或选中块
+	Plug 'vim-scripts/Mark'
+
 	" 用 v 选中一个区域后，ALT_+/- 按分隔符扩大/缩小选区
 	Plug 'terryma/vim-expand-region'
+
+	" ALT_+/- 用于按分隔符扩大缩小 v 选区
+	map <m-=> <Plug>(expand_region_expand)
+	map <m--> <Plug>(expand_region_shrink)
 
 	" 快速文件搜索
 	Plug 'junegunn/fzf'
@@ -163,6 +182,9 @@ if index(g:bundle_group, 'enhanced') >= 0
 
 	" 使用 :CtrlSF 命令进行模仿 sublime 的 grep
 	Plug 'dyng/ctrlsf.vim'
+	
+	" 设置ctrlsf 使用ag
+	let g:ctrlsf_ackprg = 'rg'
 
 	" 配对括号和引号自动补全
 	Plug 'Raimondi/delimitMate'
@@ -170,9 +192,33 @@ if index(g:bundle_group, 'enhanced') >= 0
 	" 提供 gist 接口
 	Plug 'lambdalisue/vim-gista', { 'on': 'Gista' }
 	
-	" ALT_+/- 用于按分隔符扩大缩小 v 选区
-	map <m-=> <Plug>(expand_region_expand)
-	map <m--> <Plug>(expand_region_shrink)
+	" 使用quickmenu
+	Plug 'skywind3000/quickmenu.vim'
+
+	" enable cursorline (L) and cmdline help (H)
+	let g:quickmenu_options = "LH"
+	
+	" clear all the items
+	call g:quickmenu#reset()
+	
+	" bind to F12
+	noremap <silent><F12> :call quickmenu#toggle(0)<cr>
+	
+	" section 1, text starting with "#" represents a section (see the screen capture below)
+	call g:quickmenu#append('# Develop', '')
+	
+	call g:quickmenu#append('item 1.1', 'echo "1.1 is selected"', 'select item 1.1')
+	call g:quickmenu#append('item 1.2', 'echo "1.2 is selected"', 'select item 1.2')
+	call g:quickmenu#append('item 1.3', 'echo "1.3 is selected"', 'select item 1.3')
+	
+	" section 2
+	call g:quickmenu#append('# Misc', '')
+	
+	call g:quickmenu#append('删除行尾空格', '%s/\s\+$//', ':%s/\s\+$//')
+	call g:quickmenu#append('行首插入行号', 'g/^/exec"s/^/".strpart(line(".")." ",0,4)', ':g/^/exec"s/^/".strpart(line(".")." ",0,4)')
+	call g:quickmenu#append('item 2.3', 'echo "2.3 is selected"', 'select item 2.3')
+	call g:quickmenu#append('item 2.4', 'echo "2.4 is selected"', 'select item 2.4')
+
 endif
 
 
@@ -189,6 +235,7 @@ if index(g:bundle_group, 'tags') >= 0
 	" 提供 GscopeFind 命令并自动处理好 gtags 数据库切换
 	" 支持光标移动到符号名上：<leader>cg 查看定义，<leader>cs 查看引用
 	Plug 'skywind3000/gutentags_plus'
+
 
 	" 设定项目目录标志：除了 .git/.svn 外，还有 .root 文件
 	let g:gutentags_project_root = ['.root']
@@ -221,6 +268,53 @@ if index(g:bundle_group, 'tags') >= 0
 
 	" 禁止 gutentags 自动链接 gtags 数据库
 	let g:gutentags_auto_add_gtags_cscope = 0
+
+	" disable the default keymaps
+	let g:gutentags_plus_nomap = 1
+	" define your new maps
+	noremap <silent><leader>gs :GscopeFind s <C-R><C-W><cr>
+	noremap <silent><leader>gg :GscopeFind g <C-R><C-W><cr>
+	noremap <silent><leader>gc :GscopeFind c <C-R><C-W><cr>
+	noremap <silent><leader>gt :GscopeFind t <C-R><C-W><cr>
+	noremap <silent><leader>ge :GscopeFind e <C-R><C-W><cr>
+	noremap <silent><leader>gf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>
+	noremap <silent><leader>gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>
+	noremap <silent><leader>gd :GscopeFind d <C-R><C-W><cr>
+	noremap <silent><leader>ga :GscopeFind a <C-R><C-W><cr>
+
+
+	Plug 'majutsushi/tagbar'
+
+	" toggle tagbar display
+	nmap <leader>tb :TagbarToggle<CR>
+	" autofocus on tagbar open
+	let g:tagbar_autofocus = 1
+	autocmd BufReadPost *.py,*.cpp,*.c,*.h,*.cc,*.cxx,*.hpp,*.lua call tagbar#autoopen()
+
+endif
+
+
+"----------------------------------------------------------------------
+" 通用编程插件
+" 注释、缩进线、tag、片段
+"----------------------------------------------------------------------
+if index(g:bundle_group, 'commprog') >= 0
+
+	Plug 'scrooloose/nerdcommenter'
+	Plug 'Yggdroot/indentLine'
+
+	" snippets，使用ultisnips引擎，支持shell、Vimscript、python脚本
+	Plug 'SirVer/ultisnips'
+	" 给ultisnips提供snippets
+	Plug 'honza/vim-snippets'
+
+	let g:UltiSnipsExpandTrigger = '<tab>'
+	" 使用 tab 切换下一个触发点，shit+tab 上一个触发点
+	let g:UltiSnipsJumpForwardTrigger = '<tab>' " 在snippets间前向跳转
+	let g:UltiSnipsJumpBackwardTrigger = '<s-tab>' " 在snippets间后向跳转
+	" 使用 UltiSnipsEdit 命令时垂直分割屏幕
+	let g:UltiSnipsEditSplit="vertical"
+
 endif
 
 
@@ -515,6 +609,15 @@ if index(g:bundle_group, 'leaderf') >= 0
 		" ALT+n 匹配 buffer
 		noremap <m-n> :CtrlPBuffer<cr>
 	endif
+endif
+
+
+"----------------------------------------------------------------------
+" supertab：tab键补全
+"----------------------------------------------------------------------
+if index(g:bundle_group, 'supertab') >= 0
+	" 使用Tab键补全
+	Plug 'ervandew/supertab'
 endif
 
 
