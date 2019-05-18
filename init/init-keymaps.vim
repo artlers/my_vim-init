@@ -207,8 +207,10 @@ inoremap <m-l> <c-right>
 " ALT+j/k 逻辑跳转下一行/上一行（按 wrap 逻辑换行进行跳转） 
 noremap <m-j> gj
 noremap <m-k> gk
-inoremap <m-j> <c-\><c-o>gj
-inoremap <m-k> <c-\><c-o>gk
+"inoremap <m-j> <c-\><c-o>gj
+inoremap <m-j> <down>
+"inoremap <m-k> <c-\><c-o>gk
+inoremap <m-k> <up>
 
 " 命令模式下的相同快捷
 cnoremap <m-h> <c-left>

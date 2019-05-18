@@ -18,7 +18,7 @@ if has('gui_running')
     if has("win16") || has("win32") || has("win95") || has("win64")
         set guifont=DejaVu_Sans_Mono_for_Powerline:h12:cANSI,Consolas:h12:cANSI,Courier_New:h12:cANSI
     else
-        set guifont=DejaVu\ Sans\ Mono 12
+        set guifont=DejaVu\ Sans\ Mono\ 12
     endif
 endif
 
