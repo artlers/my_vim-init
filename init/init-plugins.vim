@@ -17,7 +17,6 @@ if !exists('g:bundle_group')
 	let g:bundle_group = ['basic', 'enhanced', 'filetypes', 'textobj']
 	let g:bundle_group += ['tags', 'commprog', 'airline', 'nerdtree', 'ale', 'echodoc']
 	let g:bundle_group += ['leaderf']
-	let g:bundle_group += ['supertab']
 endif
 
 
@@ -192,6 +191,9 @@ if index(g:bundle_group, 'enhanced') >= 0
 	" 提供 gist 接口
 	Plug 'lambdalisue/vim-gista', { 'on': 'Gista' }
 	
+	" 使用Tab键补全
+	Plug 'ervandew/supertab'
+
 	" 使用quickmenu
 	Plug 'skywind3000/quickmenu.vim'
 
@@ -308,7 +310,7 @@ if index(g:bundle_group, 'commprog') >= 0
 	" 给ultisnips提供snippets
 	Plug 'honza/vim-snippets'
 
-	let g:UltiSnipsExpandTrigger = '<tab>'
+	let g:UltiSnipsExpandTrigger = '<c-t>'
 	" 使用 tab 切换下一个触发点，shit+tab 上一个触发点
 	let g:UltiSnipsJumpForwardTrigger = '<tab>' " 在snippets间前向跳转
 	let g:UltiSnipsJumpBackwardTrigger = '<s-tab>' " 在snippets间后向跳转
@@ -523,17 +525,20 @@ if index(g:bundle_group, 'leaderf') >= 0
 		" CTRL+n 打开最近使用的文件 MRU，进行模糊匹配
 		noremap <c-n> :LeaderfMru<cr>
 
+		" ALT+b 打开 buffer 列表进行模糊匹配
+		noremap <m-b> :LeaderfBuffer<cr>
+
 		" ALT+p 打开函数列表，按 i 进入模糊匹配，ESC 退出
 		noremap <m-p> :LeaderfFunction!<cr>
 
 		" ALT+SHIFT+p 打开 tag 列表，i 进入模糊匹配，ESC退出
-		noremap <m-P> :LeaderfBufTag!<cr>
-
-		" ALT+n 打开 buffer 列表进行模糊匹配
-		noremap <m-n> :LeaderfBuffer<cr>
+		noremap <m-t> :LeaderfBufTag!<cr>
 
 		" 全局 tags 模糊匹配
-		noremap <m-m> :LeaderfTag<cr>
+		noremap <m-T> :LeaderfTag<cr>
+
+		" ALT+f 打开当前buffer进行模糊匹配
+		noremap <m-f> :LeaderfLine<cr>
 
 		" 最大历史文件保存 2048 个
 		let g:Lf_MruMaxFiles = 2048
@@ -611,14 +616,6 @@ if index(g:bundle_group, 'leaderf') >= 0
 	endif
 endif
 
-
-"----------------------------------------------------------------------
-" supertab：tab键补全
-"----------------------------------------------------------------------
-if index(g:bundle_group, 'supertab') >= 0
-	" 使用Tab键补全
-	Plug 'ervandew/supertab'
-endif
 
 
 "----------------------------------------------------------------------
