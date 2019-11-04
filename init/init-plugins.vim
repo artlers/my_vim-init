@@ -629,15 +629,26 @@ call plug#end()
 " YouCompleteMe 默认设置：YCM 需要你另外手动编译安装
 "----------------------------------------------------------------------
 
+" 打开vim时不再询问是否加载ycm_extra_conf.py配置
+let g:ycm_confirm_extra_conf=0
+" 指定ycm全局配置文件
+" let g:ycm_global_ycm_extra_conf = '~\.vim\bundles\YouCompleteMe\third_party\ycmd\examples\.ycm_extra_conf.py'
+
 " 禁用预览功能：扰乱视听
 let g:ycm_add_preview_to_completeopt = 0
 
 " 禁用诊断功能：我们用前面更好用的 ALE 代替
 let g:ycm_show_diagnostics_ui = 0
 let g:ycm_server_log_level = 'info'
+" 2个字符就开始触发补全
 let g:ycm_min_num_identifier_candidate_chars = 2
+" 从注释和字符串中收集identifiers
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
+" 注释中开启补全
+let g:ycm_complete_in_comments=1
+" 字符串中开启补全
 let g:ycm_complete_in_strings=1
+" Ctrl+z触发补全
 let g:ycm_key_invoke_completion = '<c-z>'
 set completeopt=menu,menuone,noselect
 
