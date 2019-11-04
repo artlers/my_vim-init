@@ -19,7 +19,7 @@
 "----------------------------------------------------------------------
 " 定义快捷键的前缀，即 <Leader>
 "----------------------------------------------------------------------
-let mapleader=","
+let mapleader=" "
 
 " 保存当前缓冲区
 nnoremap <leader>w :w<cr>
@@ -60,7 +60,7 @@ endif
 
 
 " 清除搜索高亮
-nnoremap <leader>/ :let @/=''<CR>
+nnoremap <leader>xx :let @/=''<CR>
 
 "quickfix快捷键
 nmap <leader>jn :cn<CR>
