@@ -27,7 +27,7 @@ set guioptions-=m
 set guioptions-=T
 
 " 窗口大小
-set lines=35 columns=130
+set lines=50 columns=130
 
 
 " 高亮显示当前行 列

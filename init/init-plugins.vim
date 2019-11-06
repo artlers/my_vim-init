@@ -15,8 +15,9 @@
 "----------------------------------------------------------------------
 if !exists('g:bundle_group')
 	let g:bundle_group = ['basic', 'enhanced', 'filetypes', 'textobj']
-	let g:bundle_group += ['tags', 'commprog', 'airline', 'nerdtree', 'ale', 'echodoc']
+	let g:bundle_group += ['tags', 'commprog', 'ale', 'echodoc']
 	let g:bundle_group += ['leaderf']
+	let g:bundle_group += ['html']
 endif
 
 
@@ -151,10 +152,15 @@ endif
 if index(g:bundle_group, 'enhanced') >= 0
 
 	" 图形化撤销选择
-	Plug 'sjl/gundo.vim'
+	Plug 'mbbill/undotree'
 
-	" F5打开Gundo窗口
-	nnoremap <F5> :GundoToggle<cr>
+	" F5打开undotree窗口
+	nnoremap <F5> :UndotreeToggle<cr>
+
+	if has("persistent_undo")
+		set undodir=$HOME."/.undodir"
+		set undofile
+	endif
 
 	" 快捷操作""内容，.重复操作
 	Plug 'tpope/vim-surround'
@@ -191,9 +197,6 @@ if index(g:bundle_group, 'enhanced') >= 0
 	" 提供 gist 接口
 	Plug 'lambdalisue/vim-gista', { 'on': 'Gista' }
 	
-	" 使用Tab键补全
-	Plug 'ervandew/supertab'
-
 	" 使用quickmenu
 	Plug 'skywind3000/quickmenu.vim'
 
@@ -284,14 +287,14 @@ if index(g:bundle_group, 'tags') >= 0
 	noremap <silent><leader>gd :GscopeFind d <C-R><C-W><cr>
 	noremap <silent><leader>ga :GscopeFind a <C-R><C-W><cr>
 
-
-	Plug 'majutsushi/tagbar'
-
-	" toggle tagbar display
-	nmap <leader>tb :TagbarToggle<CR>
-	" autofocus on tagbar open
-	let g:tagbar_autofocus = 1
-	autocmd BufReadPost *.py,*.cpp,*.c,*.h,*.cc,*.cxx,*.hpp,*.lua call tagbar#autoopen()
+"	" 使用tagbar显示tag列表
+"	Plug 'majutsushi/tagbar'
+"
+"	" toggle tagbar display
+"	nmap <leader>tb :TagbarToggle<CR>
+"	" autofocus on tagbar open
+"	let g:tagbar_autofocus = 1
+"	autocmd BufReadPost *.py,*.cpp,*.c,*.h,*.cc,*.cxx,*.hpp,*.lua call tagbar#autoopen()
 
 endif
 
@@ -617,6 +620,28 @@ if index(g:bundle_group, 'leaderf') >= 0
 endif
 
 
+"----------------------------------------------------------------------
+" emmet：html增强
+"----------------------------------------------------------------------
+if index(g:bundle_group, 'html') >= 0
+	" 使用emmet
+	Plug 'mattn/emmet-vim'
+	" 仅html/css文件加载emmet插件
+	autocmd FileType html,css EmmetInstall
+	" 重新配置触发键和补全键
+	"let g:user_emmet_leader_key = '<C-Z>'
+	"let g:user_emmet_expandabbr_key = '<Tab>'
+endif
+
+
+"----------------------------------------------------------------------
+" ycm：YouCompleteMe 代码补全
+"----------------------------------------------------------------------
+if index(g:bundle_group, 'ycm') >= 0
+	" 加载ycm插件
+	Plug 'Valloric/YouCompleteMe'
+endif
+
 
 "----------------------------------------------------------------------
 " 结束插件安装
@@ -652,7 +677,7 @@ let g:ycm_complete_in_strings=1
 let g:ycm_key_invoke_completion = '<c-z>'
 set completeopt=menu,menuone,noselect
 
-" noremap <c-z> <NOP>
+"noremap <c-z> <NOP>
 
 " 两个字符自动触发语义补全
 let g:ycm_semantic_triggers =  {
@@ -718,5 +743,16 @@ let g:ycm_filetype_whitelist = {
 			\ "zimbu":1,
 			\ "ps1":1,
 			\ }
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -23,6 +23,12 @@ let mapleader=" "
 
 " 保存当前缓冲区
 nnoremap <leader>w :w<cr>
+" Save & quit
+noremap Q :q<CR>
+noremap S :w<CR>
+
+" make Y to copy till the end of the line
+nnoremap Y y$
 
 "重定向：选中复制到系统剪切板 F3
 vnoremap <F3> "+y
@@ -34,7 +40,6 @@ if 1
     exe 'inoremap <script> <F4> <C-G>u'.paste#paste_cmd['i']
     exe 'vnoremap <script> <F4>'.paste#paste_cmd['v']
 endif
-
 
 " 替换原始的Ctrl-A递加
 " 数字递加快捷键更换为Ctrl-+
@@ -58,6 +63,9 @@ if has("clipboard")
     vnoremap <S-Del> "+x
 endif
 
+" Indentation
+nnoremap < <<
+nnoremap > >>
 
 " 清除搜索高亮
 nnoremap <leader>xx :let @/=''<CR>
@@ -254,11 +262,28 @@ elseif has('nvim')
 	tnoremap <m-q> <c-\><c-n>
 endif
 
+" Disable the default s key
+noremap s <nop>
+
+" split the screens to up (horizontal), down (horizontal), left (vertical), right (vertical)
+noremap sj :set nosplitbelow<CR>:split<CR>:set splitbelow<CR>
+noremap sk :set splitbelow<CR>:split<CR>
+noremap sh :set nosplitright<CR>:vsplit<CR>:set splitright<CR>
+noremap sl :set splitright<CR>:vsplit<CR>
+
 " Resize splits with arrow keys
 noremap <up> :res +5<CR>
 noremap <down> :res -5<CR>
 noremap <left> :vertical resize-5<CR>
 noremap <right> :vertical resize+5<CR>
+
+" Place the two screens up and down
+noremap sh <C-w>t<C-w>K
+" Place the two screens side by side
+noremap sv <C-w>t<C-w>H
+
+" Press <SPACE> + q to close the window below the current window
+"noremap <LEADER>q <C-w>j:q<CR>
 
 "----------------------------------------------------------------------
 " 编译运行 C/C++ 项目
@@ -321,3 +346,5 @@ autocmd Filetype markdown inoremap <buffer> ,5 #####<Space><Enter><++><Esc>kA
 autocmd Filetype markdown inoremap <buffer> ,6 ######<Space><Enter><++><Esc>kA
 autocmd Filetype markdown inoremap <buffer> ,l --------<Enter>
 
+" Press space twice to jump to the next '<++>' and edit it
+noremap <LEADER><LEADER> <Esc>/<++><CR>:nohlsearch<CR>c4l
