@@ -44,6 +44,8 @@ call plug#begin(get(g:, 'bundle_home', '~/.vim/bundles'))
 
 " 全文快速移动，<leader><leader>f{char} 即可触发
 Plug 'easymotion/vim-easymotion'
+" 重新配置prefix	,f触发字符搜索 ,w触发单词搜索
+map , <Plug>(easymotion-prefix)
 
 " 文件浏览器，代替 netrw normal模式直接按-呼出dirvish窗口
 Plug 'justinmk/vim-dirvish'
@@ -319,6 +321,17 @@ if index(g:bundle_group, 'commprog') >= 0
 	let g:UltiSnipsJumpBackwardTrigger = '<s-tab>' " 在snippets间后向跳转
 	" 使用 UltiSnipsEdit 命令时垂直分割屏幕
 	let g:UltiSnipsEditSplit="vertical"
+
+	Plug 'Chiel92/vim-autoformat'
+
+	noremap <F9> :Autoformat<CR>
+	" to disable the fallback to vim's indent file, retabbing and removing trailing whitespace
+	let g:autoformat_autoindent = 0
+	let g:autoformat_retab = 0
+	let g:autoformat_remove_trailing_spaces = 0
+	" pep8 is the default value, or you can choose: google, facebook, chromium
+	let g:formatter_yapf_style = 'pep8'
+	"au BufWrite * :Autoformat
 
 endif
 
