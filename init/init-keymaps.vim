@@ -268,8 +268,8 @@ noremap s <nop>
 " split the screens to up (horizontal), down (horizontal), left (vertical), right (vertical)
 noremap sj :set nosplitbelow<CR>:split<CR>:set splitbelow<CR>
 noremap sk :set splitbelow<CR>:split<CR>
-noremap sh :set nosplitright<CR>:vsplit<CR>:set splitright<CR>
-noremap sl :set splitright<CR>:vsplit<CR>
+noremap sl :set nosplitright<CR>:vsplit<CR>:set splitright<CR>
+noremap sh :set splitright<CR>:vsplit<CR>
 
 " Resize splits with arrow keys
 noremap <up> :res +5<CR>
