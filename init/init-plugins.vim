@@ -18,6 +18,8 @@ if !exists('g:bundle_group')
 	let g:bundle_group += ['tags', 'commprog', 'ale', 'echodoc']
 	let g:bundle_group += ['leaderf']
 	let g:bundle_group += ['html']
+	"let g:bundle_group += ['ycm']
+
 endif
 
 
@@ -45,7 +47,7 @@ call plug#begin(get(g:, 'bundle_home', '~/.vim/bundles'))
 " 全文快速移动，<leader><leader>f{char} 即可触发
 Plug 'easymotion/vim-easymotion'
 " 重新配置prefix	,f触发字符搜索 ,w触发单词搜索
-map , <Plug>(easymotion-prefix)
+nnoremap , <Plug>(easymotion-prefix)
 
 " 文件浏览器，代替 netrw normal模式直接按-呼出dirvish窗口
 Plug 'justinmk/vim-dirvish'
@@ -193,6 +195,9 @@ if index(g:bundle_group, 'enhanced') >= 0
 	" 设置ctrlsf 使用ag
 	let g:ctrlsf_ackprg = 'rg'
 
+	" 配置 F6
+	vmap <F6> <Plug>CtrlSFVwordPath
+
 	" 配对括号和引号自动补全
 	Plug 'Raimondi/delimitMate'
 
@@ -333,6 +338,35 @@ if index(g:bundle_group, 'commprog') >= 0
 	let g:formatter_yapf_style = 'pep8'
 	"au BufWrite * :Autoformat
 
+	" Auto Complete
+	Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+	" ===
+	" === coc
+	" ===
+	" fix the most annoying bug that coc has
+	silent! au BufEnter,BufRead,BufNewFile * silent! unmap if
+	let g:coc_global_extensions = ['coc-python', 'coc-vimlsp', 'coc-emmet', 'coc-html', 'coc-json', 'coc-css', 'coc-tsserver', 'coc-yank', 'coc-lists', 'coc-gitignore', 'coc-omnisharp']
+	set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+	" use <tab> for trigger completion and navigate to the next complete item
+	function! s:check_back_space() abort
+		let col = col('.') - 1
+		return !col || getline('.')[col - 1]	=~ '\s'
+	endfunction
+	inoremap <silent><expr> <Tab>
+				\ pumvisible() ? "\<C-n>" :
+				\ <SID>check_back_space() ? "\<Tab>" :
+				\ coc#refresh()
+	inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+	inoremap <silent><expr> <c-space> coc#refresh()
+	" Useful commands
+	nnoremap <silent> <space>y :<C-u>CocList -A --normal yank<cr>
+	nnoremap <silent> gd <Plug>(coc-definition)
+	nnoremap <silent> gy <Plug>(coc-type-definition)
+	nnoremap <silent> gi <Plug>(coc-implementation)
+	nnoremap <silent> gr <Plug>(coc-references)
+	nnoremap <leader>rn <Plug>(coc-rename)
+
 endif
 
 
@@ -389,6 +423,7 @@ if index(g:bundle_group, 'filetypes') >= 0
 
 	" vim org-mode 
 	Plug 'jceb/vim-orgmode', { 'for': 'org' }
+
 endif
 
 
