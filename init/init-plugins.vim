@@ -132,6 +132,9 @@ if index(g:bundle_group, 'basic') >= 0
 	" 使用 :RemoveErrorMarkers 命令或者 <space>ha 清除错误
 	Plug 'mh21/errormarker.vim'
 
+	" 使用 <space>ha 清除 errormarker 标注的错误
+	noremap <silent><space>ha :RemoveErrorMarkers<cr>
+
 	" 使用 ALT+e 会在不同窗口/标签上显示 A/B/C 等编号，然后字母直接跳转
 	Plug 't9md/vim-choosewin'
 
@@ -143,9 +146,6 @@ if index(g:bundle_group, 'basic') >= 0
 
 	" Git 支持
 	Plug 'tpope/vim-fugitive'
-
-	" 使用 <space>ha 清除 errormarker 标注的错误
-	noremap <silent><space>ha :RemoveErrorMarkers<cr>
 
 endif
 
