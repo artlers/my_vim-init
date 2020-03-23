@@ -16,8 +16,8 @@
 "字体DejaVu Sans Mono for Powerline
 if has('gui_running')
     if has("win16") || has("win32") || has("win95") || has("win64")
-        set guifont=DejaVu_Sans_Mono_for_Powerline:h12:cANSI,Consolas:h12:cANSI,Courier_New:h12:cANSI
-	"set guifontwide=幼圆:h12:cGB2312
+        set guifont=Hack:h12:cANSI,DejaVu_Sans_Mono:h12:cANSI,Consolas:h12:cANSI,Courier_New:h12:cANSI
+		"set guifontwide=幼圆:h12:cGB2312
     else
         set guifont=DejaVu\ Sans\ Mono\ 12
     endif
@@ -27,8 +27,10 @@ endif
 set guioptions-=m
 set guioptions-=T
 
-" 窗口大小
-set lines=50 columns=130
+" GUI下窗口大小
+if has('gui_running') "没有此判断会导致终端下显示错乱
+	set lines=50 columns=130
+endif
 
 
 " 高亮显示当前行 列
