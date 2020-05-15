@@ -16,8 +16,9 @@
 "字体DejaVu Sans Mono for Powerline
 if has('gui_running')
     if has("win16") || has("win32") || has("win95") || has("win64")
-        set guifont=Hack:h12:cANSI,DejaVu_Sans_Mono:h12:cANSI,Consolas:h12:cANSI,Courier_New:h12:cANSI
+        set guifont=Hack_NF:h12:cANSI,DejaVuSansMono_NF:h12:cANSI,BlexMono_NF:h12:cANSI,Consolas:h12:cANSI,Courier_New:h12:cANSI
 		"set guifontwide=幼圆:h12:cGB2312
+		"set guifontwide=Microsoft\ Yahei\ Mono:h12
     else
         set guifont=DejaVu\ Sans\ Mono\ 12
     endif

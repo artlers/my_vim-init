@@ -17,9 +17,12 @@
 
 
 "----------------------------------------------------------------------
-" 定义快捷键的前缀，即 <Leader>
+" 定义全局的快捷键前缀，即 <Leader>
 "----------------------------------------------------------------------
 let mapleader=" "
+
+" jk -> exit to the normal mode ; ESC, <C-[>
+inoremap jk <ESC>
 
 " 保存当前缓冲区
 nnoremap <leader>w :w<cr>
@@ -336,10 +339,10 @@ endif
 autocmd Filetype markdown inoremap <buffer> ,f <Esc>/<++><CR>:nohlsearch<CR>c4l
 "autocmd Filetype markdown inoremap <buffer> ,w <Esc>/ <++><CR>:nohlsearch<CR>c5l<CR>
 autocmd Filetype markdown inoremap <buffer> ,n ---<Enter><Enter>
-autocmd Filetype markdown inoremap <buffer> ,b **** <++><Esc>F*hi
-autocmd Filetype markdown inoremap <buffer> ,d ~~~~ <++><Esc>F~hi
-autocmd Filetype markdown inoremap <buffer> ,i ** <++><Esc>F*i
-autocmd Filetype markdown inoremap <buffer> ,j `` <++><Esc>F`i
+autocmd Filetype markdown inoremap <buffer> ,b ****<++><Esc>F*hi
+autocmd Filetype markdown inoremap <buffer> ,d ~~~~<++><Esc>F~hi
+autocmd Filetype markdown inoremap <buffer> ,i **<++><Esc>F*i
+autocmd Filetype markdown inoremap <buffer> ,j ``<++><Esc>F`i
 autocmd Filetype markdown inoremap <buffer> ,c ```<Enter><++><Enter>```<Enter><Enter><++><Esc>4kA
 autocmd Filetype markdown inoremap <buffer> ,m - [ ] <Enter><++><ESC>kA
 autocmd Filetype markdown inoremap <buffer> ,p ![](<++>) <++><Esc>F[a
@@ -353,4 +356,4 @@ autocmd Filetype markdown inoremap <buffer> ,6 ######<Space><Enter><++><Esc>kA
 autocmd Filetype markdown inoremap <buffer> ,l --------<Enter>
 
 " Press space twice to jump to the next '<++>' and edit it
-noremap <LEADER><LEADER> <Esc>/<++><CR>:nohlsearch<CR>c4l
+noremap ,, <Esc>/<++><CR>:nohlsearch<CR>c4l

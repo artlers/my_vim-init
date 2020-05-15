@@ -17,7 +17,7 @@ if !exists('g:bundle_group')
 	let g:bundle_group = ['basic', 'enhanced', 'filetypes', 'textobj']
 	let g:bundle_group += ['tags', 'commprog', 'ale', 'echodoc']
 	let g:bundle_group += ['leaderf']
-	let g:bundle_group += ['html']
+	"let g:bundle_group += ['html']
 	"let g:bundle_group += ['ycm']
 
 endif
@@ -47,7 +47,7 @@ call plug#begin(get(g:, 'bundle_home', '~/.vim/bundles'))
 " 全文快速移动，<leader><leader>f{char} 即可触发
 Plug 'easymotion/vim-easymotion'
 " 重新配置prefix	,f触发字符搜索 ,w触发单词搜索
-nnoremap , <Plug>(easymotion-prefix)
+"nnoremap ; <Plug>(easymotion-prefix)
 
 " 文件浏览器，代替 netrw normal模式直接按-呼出dirvish窗口
 Plug 'justinmk/vim-dirvish'
@@ -181,13 +181,14 @@ if index(g:bundle_group, 'enhanced') >= 0
 	map <m--> <Plug>(expand_region_shrink)
 
 	" 快速文件搜索
-	Plug 'junegunn/fzf'
+	Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+	Plug 'junegunn/fzf.vim'
 
 	" 给不同语言提供字典补全，插入模式下 c-x c-k 触发
 	Plug 'asins/vim-dict'
 
 	" 使用 :FlyGrep 命令进行实时 grep
-	Plug 'wsdjeg/FlyGrep.vim'
+	"Plug 'wsdjeg/FlyGrep.vim'
 
 	" 使用 :CtrlSF 命令进行模仿 sublime 的 grep
 	Plug 'dyng/ctrlsf.vim'
@@ -195,14 +196,20 @@ if index(g:bundle_group, 'enhanced') >= 0
 	" 设置ctrlsf 使用ag
 	let g:ctrlsf_ackprg = 'rg'
 
-	" 配置 F6
+	" F6，直接搜索v模式字符串
 	vmap <F6> <Plug>CtrlSFVwordPath
+	" 配置额外的根目录标识文件或文件夹，除默认的.svn .git外
+	let g:ctrlsf_extra_root_markers = ['.root']
 
 	" 配对括号和引号自动补全
 	Plug 'Raimondi/delimitMate'
 
 	" 提供 gist 接口
 	Plug 'lambdalisue/vim-gista', { 'on': 'Gista' }
+	
+	" 优化terminal使用
+	Plug 'skywind3000/vim-terminal-help'
+	let g:terminal_key = "<m-\\>"
 	
 	" 使用quickmenu
 	Plug 'skywind3000/quickmenu.vim'
@@ -284,15 +291,15 @@ if index(g:bundle_group, 'tags') >= 0
 	" disable the default keymaps
 	let g:gutentags_plus_nomap = 1
 	" define your new maps
-	noremap <silent><leader>gs :GscopeFind s <C-R><C-W><cr>
-	noremap <silent><leader>gg :GscopeFind g <C-R><C-W><cr>
-	noremap <silent><leader>gc :GscopeFind c <C-R><C-W><cr>
-	noremap <silent><leader>gt :GscopeFind t <C-R><C-W><cr>
-	noremap <silent><leader>ge :GscopeFind e <C-R><C-W><cr>
-	noremap <silent><leader>gf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>
-	noremap <silent><leader>gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>
-	noremap <silent><leader>gd :GscopeFind d <C-R><C-W><cr>
-	noremap <silent><leader>ga :GscopeFind a <C-R><C-W><cr>
+	noremap <silent>,gs :GscopeFind s <C-R><C-W><cr>
+	noremap <silent>,gg :GscopeFind g <C-R><C-W><cr>
+	noremap <silent>,gc :GscopeFind c <C-R><C-W><cr>
+	noremap <silent>,gt :GscopeFind t <C-R><C-W><cr>
+	noremap <silent>,ge :GscopeFind e <C-R><C-W><cr>
+	noremap <silent>,gf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>
+	noremap <silent>,gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>
+	noremap <silent>,gd :GscopeFind d <C-R><C-W><cr>
+	noremap <silent>,ga :GscopeFind a <C-R><C-W><cr>
 
 "	" 使用tagbar显示tag列表
 "	Plug 'majutsushi/tagbar'
@@ -579,10 +586,10 @@ if index(g:bundle_group, 'leaderf') >= 0
 		" ALT+b 打开 buffer 列表进行模糊匹配
 		noremap <m-b> :LeaderfBuffer<cr>
 
-		" ALT+p 打开函数列表，按 i 进入模糊匹配，ESC 退出
-		noremap <m-p> :LeaderfFunction!<cr>
+		" ALT+m 打开函数列表，按 i 进入模糊匹配，ESC 退出
+		noremap <m-m> :LeaderfFunction!<cr>
 
-		" ALT+SHIFT+p 打开 tag 列表，i 进入模糊匹配，ESC退出
+		" ALT+t 打开 tag 列表，i 进入模糊匹配，ESC退出
 		noremap <m-t> :LeaderfBufTag!<cr>
 
 		" 全局 tags 模糊匹配
@@ -597,7 +604,7 @@ if index(g:bundle_group, 'leaderf') >= 0
 		" ui 定制
 		let g:Lf_StlSeparator = { 'left': '', 'right': '', 'font': '' }
 
-		" 如何识别项目目录，从当前文件目录向父目录递归知道碰到下面的文件/目录
+		" 如何识别项目目录，从当前文件目录向父目录递归直到碰到下面的文件/目录
 		let g:Lf_RootMarkers = ['.project', '.root', '.svn', '.git']
 		let g:Lf_WorkingDirectoryMode = 'Ac'
 		let g:Lf_WindowHeight = 0.30
