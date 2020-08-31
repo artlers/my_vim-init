@@ -25,7 +25,7 @@ let mapleader=" "
 inoremap jk <ESC>
 
 " 保存当前缓冲区
-nnoremap <leader>w :w<cr>
+nnoremap <leader>w :w<CR>
 " Save & quit
 noremap Q :q<CR>
 noremap S :w<CR>
