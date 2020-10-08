@@ -17,6 +17,7 @@ if !exists('g:bundle_group')
 	let g:bundle_group = ['basic', 'enhanced', 'filetypes', 'textobj']
 	let g:bundle_group += ['tags', 'commprog', 'ale', 'echodoc']
 	let g:bundle_group += ['leaderf']
+	let g:bundle_group += ['ruby']
 	"let g:bundle_group += ['html']
 	"let g:bundle_group += ['ycm']
 
@@ -144,6 +145,9 @@ if index(g:bundle_group, 'basic') >= 0
 	" 提供基于 TAGS 的定义预览，函数参数预览，quickfix 预览
 	Plug 'skywind3000/vim-preview'
 
+	autocmd FileType qf nnoremap <silent><buffer> p :PreviewQuickfix<cr>
+	autocmd FileType qf nnoremap <silent><buffer> P :PreviewClose<cr>
+
 	" Git 支持
 	Plug 'tpope/vim-fugitive'
 
@@ -154,6 +158,19 @@ endif
 " 增强插件
 "----------------------------------------------------------------------
 if index(g:bundle_group, 'enhanced') >= 0
+
+	" run shell commands in background and read output in the quickfix window in realtime
+	Plug 'skywind3000/asyncrun.vim'
+
+	" 自动打开 quickfix window ，高度为 8
+	let g:asyncrun_open = 8
+	
+	" 任务结束时候响铃提醒
+	let g:asyncrun_bell = 1
+	
+	" 设置 F10 打开/关闭 Quickfix 窗口
+	nnoremap <F10> :call asyncrun#quickfix_toggle(8)<cr>
+	
 
 	" 图形化撤销选择
 	Plug 'mbbill/undotree'
@@ -216,13 +233,13 @@ if index(g:bundle_group, 'enhanced') >= 0
 
 	" enable cursorline (L) and cmdline help (H)
 	let g:quickmenu_options = "LH"
-	
+
 	" clear all the items
 	call g:quickmenu#reset()
-	
+
 	" bind to F12
 	noremap <silent><F12> :call quickmenu#toggle(0)<cr>
-	
+
 	" section 1, text starting with "#" represents a section (see the screen capture below)
 	call g:quickmenu#append('# Develop', '')
 	
@@ -301,6 +318,16 @@ if index(g:bundle_group, 'tags') >= 0
 	noremap <silent>,gd :GscopeFind d <C-R><C-W><cr>
 	noremap <silent>,ga :GscopeFind a <C-R><C-W><cr>
 
+	" :GscopeFind s  ->  Find symbol (reference) under cursor
+	" :GscopeFind g  ->  Find symbol definition under cursor
+	" :GscopeFind c  ->  Functions calling this function
+	" :GscopeFind t  ->  Find text string under cursor
+	" :GscopeFind e  ->  Find egrep pattern under cursor
+	" :GscopeFind f  ->  Find file name under cursor
+	" :GscopeFind i  ->  Find files #including the file name under cursor
+	" :GscopeFind d  ->  Functions called by this function
+	" :GscopeFind a  ->  Find places where current symbol is assigned
+
 "	" 使用tagbar显示tag列表
 "	Plug 'majutsushi/tagbar'
 "
@@ -353,7 +380,7 @@ if index(g:bundle_group, 'commprog') >= 0
 	" ===
 	" fix the most annoying bug that coc has
 	silent! au BufEnter,BufRead,BufNewFile * silent! unmap if
-	let g:coc_global_extensions = ['coc-python', 'coc-vimlsp', 'coc-emmet', 'coc-html', 'coc-json', 'coc-css', 'coc-tsserver', 'coc-yank', 'coc-lists', 'coc-gitignore', 'coc-omnisharp']
+	let g:coc_global_extensions = ['coc-python', 'coc-vimlsp', 'coc-emmet', 'coc-html', 'coc-json', 'coc-css', 'coc-tsserver', 'coc-yank', 'coc-lists', 'coc-gitignore', 'coc-omnisharp', 'coc-solargraph']
 	set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 	" use <tab> for trigger completion and navigate to the next complete item
 	function! s:check_back_space() abort
@@ -686,6 +713,17 @@ if index(g:bundle_group, 'html') >= 0
 	" 重新配置触发键和补全键
 	"let g:user_emmet_leader_key = '<C-Z>'
 	"let g:user_emmet_expandabbr_key = '<Tab>'
+endif
+
+
+"----------------------------------------------------------------------
+" ruby：ruby插件
+"----------------------------------------------------------------------
+if index(g:bundle_group, 'ruby') >= 0
+	" 加载ycm插件
+	Plug 'vim-ruby/vim-ruby' "快速的在module, class, method中跳vim-ruby/vim-ruby跃
+	Plug 'tpope/vim-endwise' "自动补全end关键字
+	Plug 'tpope/vim-rails' "Vim开发Rails不可缺少的一个插vim-ruby/vim-ruby件
 endif
 
 
