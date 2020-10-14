@@ -8,7 +8,8 @@
 "======================================================================
 " vim: set ts=4 sw=4 tw=78 noet :
 
-
+" 设置<leader>为空格
+let mapleader=" "
 
 "----------------------------------------------------------------------
 " 默认情况下的分组，可以再前面覆盖之
@@ -18,6 +19,8 @@ if !exists('g:bundle_group')
 	let g:bundle_group += ['tags', 'commprog', 'ale', 'echodoc']
 	let g:bundle_group += ['leaderf']
 	let g:bundle_group += ['ruby']
+	let g:bundle_group += ['go']
+	let g:bundle_group += ['new']
 	"let g:bundle_group += ['html']
 	"let g:bundle_group += ['ycm']
 
@@ -47,7 +50,7 @@ call plug#begin(get(g:, 'bundle_home', '~/.vim/bundles'))
 
 " 全文快速移动，<leader><leader>f{char} 即可触发
 Plug 'easymotion/vim-easymotion'
-" 重新配置prefix	,f触发字符搜索 ,w触发单词搜索
+" 重新配置prefix	;f触发字符搜索 ;w触发单词搜索
 "nnoremap ; <Plug>(easymotion-prefix)
 
 " 文件浏览器，代替 netrw normal模式直接按-呼出dirvish窗口
@@ -233,13 +236,13 @@ if index(g:bundle_group, 'enhanced') >= 0
 
 	" enable cursorline (L) and cmdline help (H)
 	let g:quickmenu_options = "LH"
-
+	
 	" clear all the items
 	call g:quickmenu#reset()
-
+	
 	" bind to F12
 	noremap <silent><F12> :call quickmenu#toggle(0)<cr>
-
+	
 	" section 1, text starting with "#" represents a section (see the screen capture below)
 	call g:quickmenu#append('# Develop', '')
 	
@@ -336,6 +339,34 @@ if index(g:bundle_group, 'tags') >= 0
 "	" autofocus on tagbar open
 "	let g:tagbar_autofocus = 1
 "	autocmd BufReadPost *.py,*.cpp,*.c,*.h,*.cc,*.cxx,*.hpp,*.lua call tagbar#autoopen()
+"
+	" vista.vim 显示tag和symbol，支持lsp和async
+	Plug 'liuchengxu/vista.vim'
+
+	function! NearestMethodOrFunction() abort
+	  return get(b:, 'vista_nearest_method_or_function', '')
+	endfunction
+
+	set statusline+=%{NearestMethodOrFunction()}
+
+	" By default vista.vim never run if you don't call it explicitly.
+	"
+	" If you want to show the nearest function in your statusline automatically,
+	" you can add the following line to your vimrc
+	autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
+
+	noremap <LEADER>v :Vista coc<CR>
+	noremap <c-t> :silent! Vista finder coc<CR>
+	let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
+	let g:vista_default_executive = 'ctags'
+	let g:vista_fzf_preview = ['right:50%']
+	let g:vista#renderer#enable_icon = 1
+	let g:vista#renderer#icons = {
+	\   "function": "\uf794",
+	\   "variable": "\uf71b",
+	\  }
+
+	let g:scrollstatus_size = 15
 
 endif
 
@@ -400,6 +431,11 @@ if index(g:bundle_group, 'commprog') >= 0
 	nnoremap <silent> gi <Plug>(coc-implementation)
 	nnoremap <silent> gr <Plug>(coc-references)
 	nnoremap <leader>rn <Plug>(coc-rename)
+
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter, <cr> could be remapped by other vim plugin
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 endif
 
@@ -604,17 +640,14 @@ if index(g:bundle_group, 'leaderf') >= 0
 		" CTRL+p 打开文件模糊匹配
 		let g:Lf_ShortcutF = '<c-p>'
 
-		" ALT+n 打开 buffer 模糊匹配
-		let g:Lf_ShortcutB = '<m-n>'
+		" ALT+b 打开 buffer 模糊匹配
+		let g:Lf_ShortcutB = '<m-b>'
 
-		" CTRL+n 打开最近使用的文件 MRU，进行模糊匹配
-		noremap <c-n> :LeaderfMru<cr>
+		" CTRL+h 打开最近使用的文件 MRU，进行模糊匹配
+		noremap <c-h> :LeaderfMru<cr>
 
-		" ALT+b 打开 buffer 列表进行模糊匹配
-		noremap <m-b> :LeaderfBuffer<cr>
-
-		" ALT+m 打开函数列表，按 i 进入模糊匹配，ESC 退出
-		noremap <m-m> :LeaderfFunction!<cr>
+		" ALT+f 打开函数列表，按 i 进入模糊匹配，ESC 退出
+		noremap <m-f> :LeaderfFunction!<cr>
 
 		" ALT+t 打开 tag 列表，i 进入模糊匹配，ESC退出
 		noremap <m-t> :LeaderfBufTag!<cr>
@@ -622,8 +655,8 @@ if index(g:bundle_group, 'leaderf') >= 0
 		" 全局 tags 模糊匹配
 		noremap <m-T> :LeaderfTag<cr>
 
-		" ALT+f 打开当前buffer进行模糊匹配
-		noremap <m-f> :LeaderfLine<cr>
+		" ALT+s 打开当前buffer进行模糊匹配
+		noremap <m-s> :LeaderfLine<cr>
 
 		" 最大历史文件保存 2048 个
 		let g:Lf_MruMaxFiles = 2048
@@ -690,15 +723,24 @@ if index(g:bundle_group, 'leaderf') >= 0
 		" CTRL+p 打开文件模糊匹配
 		noremap <c-p> :CtrlP<cr>
 
-		" CTRL+n 打开最近访问过的文件的匹配
-		noremap <c-n> :CtrlPMRUFiles<cr>
+		" CTRL+h 打开最近访问过的文件的匹配
+		noremap <c-h> :CtrlPMRUFiles<cr>
 
-		" ALT+p 显示当前文件的函数列表
-		noremap <m-p> :CtrlPFunky<cr>
+		" ALT+f 显示当前文件的函数列表
+		noremap <m-f> :CtrlPFunky<cr>
 
-		" ALT+n 匹配 buffer
-		noremap <m-n> :CtrlPBuffer<cr>
+		" ALT+b 匹配 buffer
+		noremap <m-b> :CtrlPBuffer<cr>
 	endif
+endif
+
+
+"----------------------------------------------------------------------
+" Go dev conf
+"----------------------------------------------------------------------
+if index(g:bundle_group, 'go') >= 0
+	" 使用vim-go
+	Plug 'fatih/vim-go'
 endif
 
 
@@ -720,7 +762,7 @@ endif
 " ruby：ruby插件
 "----------------------------------------------------------------------
 if index(g:bundle_group, 'ruby') >= 0
-	" 加载ycm插件
+	" 加载ruby插件
 	Plug 'vim-ruby/vim-ruby' "快速的在module, class, method中跳vim-ruby/vim-ruby跃
 	Plug 'tpope/vim-endwise' "自动补全end关键字
 	Plug 'tpope/vim-rails' "Vim开发Rails不可缺少的一个插vim-ruby/vim-ruby件
@@ -733,6 +775,15 @@ endif
 if index(g:bundle_group, 'ycm') >= 0
 	" 加载ycm插件
 	Plug 'Valloric/YouCompleteMe'
+endif
+
+
+"----------------------------------------------------------------------
+" new: attempt to use sth
+"----------------------------------------------------------------------
+if index(g:bundle_group, 'new') >= 0
+	" 加载xxx插件
+	"Plug 'plasticboy/vim-markdown'
 endif
 
 
